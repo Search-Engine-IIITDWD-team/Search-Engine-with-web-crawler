@@ -19,7 +19,12 @@ app.get("/searchQuery", function (request, response) {
 
     let miniSearch = new MiniSearch({
         fields: ['text', 'href'], // fields to index for full-text search
-        storeFields: ['text', 'href'] // fields to return with search results
+        storeFields: ['text', 'href'], // fields to return with search results
+        searchOptions: {
+            prefix: true,
+            fuzzy: 0.2,
+            boost: { text: 2 }
+        }        
     })
 
     // Index all documents
@@ -48,6 +53,6 @@ app.get('/', function (req, res) {
 
 
 //start the server
-app.listen(8080);
+app.listen(8087);
 
 console.log("Something awesome to happen at http://localhost:8080");
