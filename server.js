@@ -46,6 +46,50 @@ app.get("/searchQuery", function (request, response) {
 
 });
 
+app.get('/endpoint', function (req, res) {
+    var obj = {};
+    obj.title = 'title';
+    obj.data = 'data';
+    const MiniSearch = require('minisearch')
+
+    // console.log('params: ' + JSON.stringify(req.params));
+    // console.log('body: ' + JSON.stringify(req.body));
+    // console.log('query: ' + JSON.stringify(req.query));
+    var keyword = req.query.title
+    console.log('query: ' + keyword);
+    // console.log('query: ' + JSON.stringify(req.keyword));
+
+    // A collection of documents for our examples
+    const documents = require('./dataVM.json')
+
+    let miniSearch = new MiniSearch({
+        fields: ['title', 'text'], // fields to index for full-text search
+        storeFields: ['title', 'category'] // fields to return with search results
+    })
+
+    // Index all documents
+    miniSearch.addAll(documents)
+
+    // Search with default options
+    let results = miniSearch.autoSuggest(keyword)
+    let resToSend;
+    if (results.length > 10){
+        for (let index = 0; index < 10; index++) {
+            resToSend[index] = results[index]
+        }
+    }
+    else{
+        resToSend = results;
+    }
+    console.log(resToSend)
+
+    res.header('Content-type', 'application/json');
+    res.header('Charset', 'utf8');
+    // res.send(req.query.callback + '(' + JSON.stringify(obj) + ');');
+    res.send(results);
+    // res.send("")
+});
+
 // index page
 app.get('/', function (req, res) {
     res.render('pages/index');
@@ -53,6 +97,6 @@ app.get('/', function (req, res) {
 
 
 //start the server
-app.listen(8087);
+app.listen(8080);
 
 console.log("Something awesome to happen at http://localhost:8080");

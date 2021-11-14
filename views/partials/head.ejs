@@ -102,7 +102,114 @@
         border: 1px solid #4885ed;
         padding: 9px 19px;
     }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        overflow: auto;
+        border: 1px solid #ddd;
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown a:hover {
+        background-color: #ddd;
+    }
 </style>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        // $('#select_link').click(function(e){
+        $('#keyword').keyup(function (e) {
+            e.preventDefault();
+            // console.log('select_link clicked');
+
+            var data1 = {};
+            data1.title = document.getElementById('keyword').value;
+            // data.message = "message";
+            // var data = document.getElementById('query').value;
+            document.getElementById("myDropdown").innerHTML = `<div></div>`;
+            if (data1.title.length > 3) {
+                $.ajax({
+                    type: 'GET',
+                    // data: JSON.stringify(data),
+                    data: data1,
+                    // contentType: 'application/json',
+                    dataType: "json",
+                    // data: data,
+                    // contentType: 'application/txt',
+                    url: 'http://localhost:8080/endpoint',
+                    success: function (data) {
+                        
+                        console.log(data1.title);
+                        
+                        console.log(data[0].suggestion)
+                        console.log("Tyoe of suggestion is "+typeof(data[0]))
+                        // document.getElementById("myDropdown").innerHTML = `<div></div>`;
+                        // if (data.length != 0) {
+                        //     if (data.length > 10) {
+                        //         var shownResult = 10;
+                        //     }
+                        //     else {
+                        //         var shownResult = data.length;
+                        //     }
+                        if(data.length != 0){
+                            for (i = 0; i < data.length; i++) {
+                                let txtValue = data[i].suggestion;
+                                console.log("Suggestion is " + txtValue);
+                                document.getElementById("myDropdown").innerHTML += `
+                            <a onClick="document.getElementById("myInput").value = ${txtValue};" >${txtValue}</a>
+                            `
+                            }    
+                        }
+                        // else{
+                        //     document.getElementById("myDropdown").innerHTML = `<div></div>`;
+                        // }
+                        // }
+                    },
+                    error: function (jqXHR, exception) {
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        // $('#post').html(msg);
+                        console.log(msg);
+                    },
+                    
+                    complete: function (xhr, status) {
+                        console.log('Ajax completed')
+                    }
+                });
+            }
+
+
+        });
+    });
+</script>
 <html>
 <center>
     <header>

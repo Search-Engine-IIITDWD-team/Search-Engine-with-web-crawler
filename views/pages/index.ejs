@@ -1,10 +1,24 @@
 <%- include('../partials/head'); %>
-<form method='GET' autocomplete="off" action="/searchQuery">
+    <!-- <form method='GET' autocomplete="off" action="/searchQuery">
     <div class="bar">
         <input class="searchbar" id="keyword" name="keyword" type="text" title="Search">
     </div>
     <div class="buttons">
         <button class="button" type="submit">IIIT Dharward Search</button>
     </div>
-</form>
-<%- include('../partials/footer'); %>
+</form> -->
+    <form method='GET' autocomplete="off" action="/searchQuery">
+        <div class="dropdown" style="padding-left: 30%; padding-right: 30%;">
+            <div class="bar">
+                
+                <input class="searchbar" id="keyword" name="keyword" type="text" title="Search">
+                <div id="myDropdown" class="dropdown-content">
+                
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="button" type="submit">IIIT Dharward Search</button>
+            </div>
+        </div>
+    </form>
+    <%- include('../partials/footer'); %>
